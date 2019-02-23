@@ -129,7 +129,7 @@ class MainForm(wx.Frame):
 
         panel.SetSizer(sizer)
 
-    def on_open_xml(self, event):
+    def on_open_xml(self, event): #pylint: disable=unused-argument
         """
         Create and show the Open FileDialog
         """
@@ -146,7 +146,7 @@ class MainForm(wx.Frame):
 
         dlg.Destroy()
 
-    def on_open_xsd(self, event):
+    def on_open_xsd(self, event): #pylint: disable=unused-argument
         """
         Create and show the Open FileDialog
         """
@@ -162,16 +162,16 @@ class MainForm(wx.Frame):
             self.xsd_file_txt.SetValue(path)
         dlg.Destroy()
 
-    def on_change_xml(self, event):
+    def on_change_xml(self, event): #pylint: disable=unused-argument
 
         self.current_xml = Path(self.xml_file_txt.GetValue())
         self.xml_doc = None
 
-    def on_change_xsd(self, event):
+    def on_change_xsd(self, event): #pylint: disable=unused-argument
 
         self.current_xsd = Path(self.xsd_file_txt.GetValue())
 
-    def on_syntax(self, event):
+    def on_syntax(self, event): #pylint: disable=unused-argument
 
         if not self.current_xml:
             self.tool_stx_result.SetForegroundColour(COLOR_ER)
@@ -201,7 +201,7 @@ class MainForm(wx.Frame):
                     'XML syntax error, check below for details!')
                 self.error_details.ChangeValue(error_log)
 
-    def on_trim(self, event):
+    def on_trim(self, event): #pylint: disable=unused-argument
 
         if not self.current_xml:
             self.tool_trim_result.SetForegroundColour(COLOR_ER)
@@ -247,7 +247,7 @@ class MainForm(wx.Frame):
                     'XML syntax error, check syntax first for details!')
                 self.error_details.ChangeValue('')
 
-    def on_validate(self, event):
+    def on_validate(self, event): #pylint: disable=unused-argument
 
         if (not self.current_xml) or (not self.current_xsd):
             self.tool_vld_result.SetForegroundColour(COLOR_ER)
@@ -290,7 +290,7 @@ class MainForm(wx.Frame):
                     'Schema validation error, check below for details!')
                 self.error_details.ChangeValue(error_log)
 
-    def on_save_error(self, event):
+    def on_save_error(self, event): #pylint: disable=unused-argument
 
         results = self.error_details.GetValue()
 
