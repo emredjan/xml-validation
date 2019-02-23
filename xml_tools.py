@@ -4,18 +4,20 @@ GUI app for XML tools
 
 import sys
 from pathlib import Path
+from typing import Optional
 
 import wx
+from lxml import etree
 
 from xmltools import utils
 
-WILDCARD_XML = "XML files (*.xml)|*.xml|" \
-            "All files (*.*)|*.*"
+WILDCARD_XML = 'XML files (*.xml)|*.xml|' \
+            'All files (*.*)|*.*'
 
-WILDCARD_XSD = "XSD files (*.xsd)|*.xsd|" \
-            "All files (*.*)|*.*"
+WILDCARD_XSD = 'XSD files (*.xsd)|*.xsd|' \
+            'All files (*.*)|*.*'
 
-WILDCARD_ALL = "All files (*.*)|*.*"
+WILDCARD_ALL = 'All files (*.*)|*.*'
 
 PANEL_SIZE = (800, 600)
 
@@ -31,7 +33,7 @@ class MainForm(wx.Frame):
     Main class for the application
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
 
         wx.Frame.__init__(
             self,
@@ -43,16 +45,16 @@ class MainForm(wx.Frame):
 
         self.init_ui()
 
-    def init_ui(self):
+    def init_ui(self) -> None:
         """
         Initialize the user interface
         """
 
         panel = wx.Panel(self, wx.ID_ANY)
         self.current_dir = Path.cwd()
-        self.current_xml = None
-        self.current_xsd = None
-        self.xml_doc = None
+        self.current_xml: Optional[Path] = None
+        self.current_xsd: Optional[Path]= None
+        self.xml_doc: Optional[etree.ElementTree] = None
 
         # create the buttons and bindings
 
@@ -129,15 +131,15 @@ class MainForm(wx.Frame):
 
         panel.SetSizer(sizer)
 
-    def on_open_xml(self, event): #pylint: disable=unused-argument
+    def on_open_xml(self, event) -> None: #pylint: disable=unused-argument
         """
         Create and show the Open FileDialog
         """
         dlg = wx.FileDialog(
             self,
-            message="Choose a file",
+            message='Choose an XML file',
             defaultDir=str(self.current_dir),
-            defaultFile="",
+            defaultFile='',
             wildcard=WILDCARD_XML,
             style=wx.FD_OPEN | wx.FD_CHANGE_DIR | wx.FD_FILE_MUST_EXIST)
         if dlg.ShowModal() == wx.ID_OK:
@@ -146,15 +148,15 @@ class MainForm(wx.Frame):
 
         dlg.Destroy()
 
-    def on_open_xsd(self, event): #pylint: disable=unused-argument
+    def on_open_xsd(self, event) -> None: #pylint: disable=unused-argument
         """
         Create and show the Open FileDialog
         """
         dlg = wx.FileDialog(
             self,
-            message="Choose a file",
+            message='Choose an XSD file',
             defaultDir=str(self.current_dir),
-            defaultFile="",
+            defaultFile='',
             wildcard=WILDCARD_XSD,
             style=wx.FD_OPEN | wx.FD_CHANGE_DIR | wx.FD_FILE_MUST_EXIST)
         if dlg.ShowModal() == wx.ID_OK:
@@ -162,22 +164,22 @@ class MainForm(wx.Frame):
             self.xsd_file_txt.SetValue(path)
         dlg.Destroy()
 
-    def on_change_xml(self, event): #pylint: disable=unused-argument
+    def on_change_xml(self, event) -> None: #pylint: disable=unused-argument
 
         self.current_xml = Path(self.xml_file_txt.GetValue())
         self.xml_doc = None
 
-    def on_change_xsd(self, event): #pylint: disable=unused-argument
+    def on_change_xsd(self, event) -> None: #pylint: disable=unused-argument
 
         self.current_xsd = Path(self.xsd_file_txt.GetValue())
 
-    def on_syntax(self, event): #pylint: disable=unused-argument
+    def on_syntax(self, event) -> None: #pylint: disable=unused-argument
 
         if not self.current_xml:
             self.tool_stx_result.SetForegroundColour(COLOR_ER)
             self.tool_stx_result.SetLabel('Select an XML file above.')
             return
-        elif not self.current_xml.exists():
+        if not self.current_xml.exists():
             self.tool_stx_result.SetForegroundColour(COLOR_ER)
             self.tool_stx_result.SetLabel('File I/O error, check path!')
             self.error_details.ChangeValue('')
@@ -201,13 +203,13 @@ class MainForm(wx.Frame):
                     'XML syntax error, check below for details!')
                 self.error_details.ChangeValue(error_log)
 
-    def on_trim(self, event): #pylint: disable=unused-argument
+    def on_trim(self, event) -> None: #pylint: disable=unused-argument
 
         if not self.current_xml:
             self.tool_trim_result.SetForegroundColour(COLOR_ER)
             self.tool_trim_result.SetLabel('Select an XML file above.')
             return
-        elif not self.current_xml.exists():
+        if not self.current_xml.exists():
             self.tool_trim_result.SetForegroundColour(COLOR_ER)
             self.tool_trim_result.SetLabel('File I/O error, check file path!')
             self.error_details.ChangeValue('')
@@ -215,9 +217,9 @@ class MainForm(wx.Frame):
 
         dlg = wx.FileDialog(
             self,
-            message="Choose where to save the trimmed file",
+            message='Choose where to save the trimmed file',
             defaultDir=str(self.current_dir),
-            defaultFile="",
+            defaultFile='',
             wildcard=WILDCARD_XML,
             style=wx.FD_SAVE | wx.FD_CHANGE_DIR | wx.FD_OVERWRITE_PROMPT)
         if dlg.ShowModal() == wx.ID_OK:
@@ -247,13 +249,13 @@ class MainForm(wx.Frame):
                     'XML syntax error, check syntax first for details!')
                 self.error_details.ChangeValue('')
 
-    def on_validate(self, event): #pylint: disable=unused-argument
+    def on_validate(self, event) -> None: #pylint: disable=unused-argument
 
         if (not self.current_xml) or (not self.current_xsd):
             self.tool_vld_result.SetForegroundColour(COLOR_ER)
             self.tool_vld_result.SetLabel('Select an XML and an XSD file above.')
             return
-        elif (not self.current_xml.exists()) or (not self.current_xsd.exists()):
+        if (not self.current_xml.exists()) or (not self.current_xsd.exists()):
             self.tool_vld_result.SetForegroundColour(COLOR_ER)
             self.tool_vld_result.SetLabel('File I/O error, check file paths!')
             self.error_details.ChangeValue('')
@@ -290,9 +292,9 @@ class MainForm(wx.Frame):
                     'Schema validation error, check below for details!')
                 self.error_details.ChangeValue(error_log)
 
-    def on_save_error(self, event): #pylint: disable=unused-argument
+    def on_save_error(self, event) -> None: #pylint: disable=unused-argument
 
-        results = self.error_details.GetValue()
+        results: str = self.error_details.GetValue()
 
         if not results:
             self.save_ed_result.SetForegroundColour(COLOR_ER)
@@ -301,7 +303,7 @@ class MainForm(wx.Frame):
 
         dlg = wx.FileDialog(
             self,
-            message="Choose where to save the error results",
+            message='Choose where to save the error results',
             defaultDir=str(self.current_dir),
             defaultFile='error_details.log',
             wildcard=WILDCARD_ALL,
@@ -325,7 +327,7 @@ class MainForm(wx.Frame):
                 'File I/O error, check file paths!')
 
 
-def resource_path(relative_path):
+def resource_path(relative_path: str) -> str:
     """ Get absolute path to resource, works for dev and for PyInstaller """
 
     parent_dir = Path(__file__).absolute().parent
@@ -334,7 +336,7 @@ def resource_path(relative_path):
     return str(base_path / relative_path)
 
 # Run the program
-if __name__ == "__main__":
+if __name__ == '__main__':
     app = wx.App(False)
     frame = MainForm()
     frame.SetIcon(wx.Icon(resource_path('xml_tools.ico')))

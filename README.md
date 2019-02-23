@@ -4,7 +4,7 @@ Small tool written in Python to check and validate XML files.
 
 * [ ] Update readme
 * [ ] Write tests
-* [ ] Add type hinting
+* [x] Add type hinting
 * [ ] Add versioning
 * [ ] Add automated builds, CI/CD
 * [ ] UI improvements (messages, etc.)
