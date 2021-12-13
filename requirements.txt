@@ -1,7 +1,7 @@
 altgraph==0.16.1
 certifi==2018.11.29
 future==0.17.1
-lxml==4.6.2
+lxml==4.6.5
 macholib==1.11
 pefile==2018.8.8
 Pillow
